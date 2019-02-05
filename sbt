@@ -1,1 +1,0 @@
-project/sbt/bin/sbt
