@@ -28,7 +28,7 @@ import scala.concurrent.{ExecutionContext, Future}
 trait MetricsFilter extends Filter
 
 class DisabledMetricsFilter @Inject()(implicit val mat: Materializer) extends MetricsFilter {
-  def apply(nextFilter: (RequestHeader) => Future[Result])(rh: RequestHeader): Future[Result] = {
+  def apply(nextFilter: RequestHeader => Future[Result])(rh: RequestHeader): Future[Result] = {
     nextFilter(rh)
   }
 }
@@ -56,14 +56,13 @@ class MetricsFilterImpl @Inject() (metrics: Metrics)(implicit val mat: Materiali
     Status.CREATED, Status.TEMPORARY_REDIRECT, Status.INTERNAL_SERVER_ERROR, Status.CONFLICT,
     Status.UNAUTHORIZED, Status.NOT_MODIFIED)
 
-
-  def statusCodes: Map[Int, Meter] = knownStatuses.map(s => s -> registry.meter(name(labelPrefix, s.toString))).toMap
+  def statusCodes: Map[Int, Meter] = knownStatuses.map(s ⇒ s → registry.meter(name(labelPrefix, s.toString))).toMap
 
   def requestsTimer: Timer = registry.timer(name(labelPrefix, "requestTimer"))
   def activeRequests: Counter = registry.counter(name(labelPrefix, "activeRequests"))
   def otherStatuses: Meter = registry.meter(name(labelPrefix, "other"))
 
-  def apply(nextFilter: (RequestHeader) => Future[Result])(rh: RequestHeader): Future[Result] = {
+  def apply(nextFilter: (RequestHeader) ⇒ Future[Result])(rh: RequestHeader): Future[Result] = {
 
     val context = requestsTimer.time()
 
@@ -75,11 +74,11 @@ class MetricsFilterImpl @Inject() (metrics: Metrics)(implicit val mat: Materiali
 
     activeRequests.inc()
     nextFilter(rh).transform(
-      result => {
+      result ⇒ {
         logCompleted(result)
         result
       },
-      exception => {
+      exception ⇒ {
         logCompleted(Results.InternalServerError)
         exception
       }

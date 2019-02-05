@@ -1,6 +1,6 @@
 # metrics-play
 
-This module provides some support for @codahale [Metrics](https://dropwizard.github.io/metrics/3.1.0/) library in a Play2 application (Scala)
+This module provides some support for @codahale [Metrics](https://dropwizard.github.io/metrics/3.1.2/) library in a Play2 application (Scala)
 
 [![Build Status](https://travis-ci.org/kenshoo/metrics-play.png)](https://travis-ci.org/kenshoo/metrics-play)
 
@@ -20,10 +20,7 @@ Play Version: 2.6.19, Metrics Version: 4.0.3, Scala Versions: 2.12.6
 Add metrics-play dependency:
 
 ```scala
-    val appDependencies = Seq(
-    ...
-    "com.kenshoo" %% "metrics-play" % "2.6.19_0.7.0"
-    )
+    libraryDependencies += "com.kenshoo" %% "metrics-play" % "2.6.19_0.7.0"
 ```
 
 To enable the module:
@@ -57,17 +54,19 @@ To enable the controller add a mapping to conf/routes file
      GET     /admin/metrics              com.kenshoo.play.metrics.MetricsController.metrics
      
 #### Configuration
-Some configuration is supported through the default configuration file:
 
-    metrics.rateUnit - (default is SECONDS) 
+Override values from the (metrics-reference.conf)[src/main/resources/metrics-reference.conf] as needed in your `application.conf`:
 
-    metrics.durationUnit (default is SECONDS)
-
-    metrics.showSamples [true/false] (default is false)
-
-    metrics.jvm - [true/false] (default is true) controls reporting jvm metrics
-  
-    metrics.logback - [true/false] (default is true) controls reporing logback metrics
+```HOCON
+metrics {
+     name: "default"
+     rateUnit: "SECONDS"
+     durationUnit: "SECONDS"
+     showSamples: false
+     jvm: true # reporting jvm metrics
+     logback: true # controls reporing logback metrics 
+}
+```
 
 ### Metrics Filter
 

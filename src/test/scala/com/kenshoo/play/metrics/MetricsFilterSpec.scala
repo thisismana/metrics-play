@@ -42,7 +42,7 @@ object MetricsFilterSpec extends Specification {
     def filters = Seq(metricsFilter)
   }
 
-  def withApplication[T](result: => Result)(block: Application => T): T = {
+  def withApplication[T](result: ⇒ Result)(block: Application ⇒ T): T = {
 
     lazy val application = new GuiceApplicationBuilder()
       .overrides(

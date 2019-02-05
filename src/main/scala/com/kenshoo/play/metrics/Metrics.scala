@@ -2,17 +2,16 @@ package com.kenshoo.play.metrics
 
 import java.io.StringWriter
 import java.util.concurrent.TimeUnit
-import javax.inject.{Inject, Singleton}
 
 import ch.qos.logback.classic
 import com.codahale.metrics.json.MetricsModule
-import com.codahale.metrics.jvm.{ThreadStatesGaugeSet, MemoryUsageGaugeSet, GarbageCollectorMetricSet}
+import com.codahale.metrics.jvm.{GarbageCollectorMetricSet, JvmAttributeGaugeSet, MemoryUsageGaugeSet, ThreadStatesGaugeSet}
 import com.codahale.metrics.logback.InstrumentedAppender
-import com.codahale.metrics.{SharedMetricRegistries, MetricRegistry}
-import com.codahale.metrics.jvm.JvmAttributeGaugeSet
-import com.fasterxml.jackson.databind.{ObjectWriter, ObjectMapper}
-import play.api.{Logger, Configuration}
+import com.codahale.metrics.{MetricRegistry, SharedMetricRegistries}
+import com.fasterxml.jackson.databind.{ObjectMapper, ObjectWriter}
+import javax.inject.{Inject, Singleton}
 import play.api.inject.ApplicationLifecycle
+import play.api.{Configuration, Environment, Logger}
 
 import scala.concurrent.Future
 
@@ -25,7 +24,7 @@ trait Metrics {
 }
 
 @Singleton
-class MetricsImpl @Inject() (lifecycle: ApplicationLifecycle, configuration: Configuration) extends Metrics {
+class MetricsImpl @Inject()(lifecycle: ApplicationLifecycle, configuration: Configuration, env: Environment) extends Metrics {
 
   val validUnits = Set("NANOSECONDS", "MICROSECONDS", "MILLISECONDS", "SECONDS", "MINUTES", "HOURS", "DAYS")
 
@@ -82,7 +81,9 @@ class MetricsImpl @Inject() (lifecycle: ApplicationLifecycle, configuration: Con
   }
 
   onStart()
-  lifecycle.addStopHook(() => Future.successful{ onStop() })
+  lifecycle.addStopHook(() ⇒ Future.successful {
+    onStop()
+  })
 }
 
 @Singleton

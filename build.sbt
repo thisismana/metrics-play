@@ -1,19 +1,18 @@
-organization:= "com.kenshoo"
+import scala.util.Properties
 
+organization := "de.welt"
 name := "metrics-play"
+licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 
-scalaVersion := "2.12.6"
+crossScalaVersions := Seq("2.12.8", "2.13.0-M5")
 
-crossScalaVersions := Seq(scalaVersion.value, "2.11.11")
-
-val playVersion = "2.6.19"
+val PlayVersion = "2.7.0"
 
 val metricsPlayVersion = "0.7.0"
 
-val dropwizardVersion = "4.0.3"
+val dropwizardVersion = "4.0.5"
 
-version := s"${playVersion}_${metricsPlayVersion}"
-
+version in ThisBuild := PlayVersion + "_" + Properties.envOrElse("BUILD_NUMBER", "0-SNAPSHOT")
 
 
 scalacOptions := Seq("-unchecked", "-deprecation")
@@ -23,7 +22,6 @@ testOptions in Test += Tests.Argument("junitxml", "console")
 parallelExecution in Test := false
 
 resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
-
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
 resolvers += "specs2" at "https://mvnrepository.com/artifact/org.specs2/specs2_2.12"
@@ -34,60 +32,36 @@ libraryDependencies ++= Seq(
     "io.dropwizard.metrics" % "metrics-json" % dropwizardVersion,
     "io.dropwizard.metrics" % "metrics-jvm" % dropwizardVersion,
     "io.dropwizard.metrics" % "metrics-logback" % dropwizardVersion,
-    "com.typesafe.play" %% "play" % playVersion % Provided,
+    "com.typesafe.play" %% "play" % PlayVersion % Provided,
     "org.joda" % "joda-convert" % "2.1.1",
 
     //Test
-    "com.typesafe.play" %% "play-test" % playVersion % Test,
-    "com.typesafe.play" %% "play-specs2" % playVersion % Test
+    "com.typesafe.play" %% "play-test" % PlayVersion % Test,
+    "com.typesafe.play" %% "play-specs2" % PlayVersion % Test
 )
+scalacOptions := Seq("-unchecked", "-deprecation", "-target:jvm-1.8", "-Xcheckinit", "-encoding", "utf8", "-feature")
 
-publishMavenStyle := true
-
-publishTo := Some(
-  if (isSnapshot.value)
-    Opts.resolver.sonatypeSnapshots
-  else
-    Opts.resolver.sonatypeStaging
-)
-
-credentials += Credentials(Path.userHome / ".m2" / ".credentials")
-
-pomIncludeRepository := { _ => false }
-
-publishArtifact in Test := false
-
-pomExtra := (
-  <url>https://github.com/kenshoo/metrics-play</url>
-    <inceptionYear>2013</inceptionYear>
-    <licenses>
-      <license>
-        <name>Apache 2</name>
-        <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        <distribution>repo</distribution>
-        <comments>A business-friendly OSS license</comments>
-      </license>
-    </licenses>
+pomExtra :=
+  <licenses>
+    <license>
+      <name>Apache-2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
     <scm>
-      <url>git@github.com:kenshoo/metrics-play.git</url>
-      <connection>scm:git@github.com:kenshoo/metrics-play.git</connection>
+      <url>https://github.com/thisismana/metrics-play</url>
+      <connection>scm:git:git@github.com:thisismana/metrics-play.git</connection>
     </scm>
     <developers>
       <developer>
-        <name>Ran Nisim</name>
-        <email>rannisim@gmail.com</email>
-        <roles>
-          <role>Author</role>
-        </roles>
-        <organization>Kenshoo</organization>
-      </developer>
-      <developer>
-        <name>Lior Harel</name>
-        <email>harel.lior@gmail.com</email>
-        <roles>
-          <role>Author</role>
-        </roles>
-        <organization>Kenshoo</organization>
+        <id>thisismana</id>
+        <name>Matthias Naber</name>
+        <url>https://github.com/thisismana</url>
       </developer>
     </developers>
-  )
+
+bintrayRepository := s"metrics-play"
+bintrayOrganization := Some("welt")
+bintrayVcsUrl := Some("git@github.com:thisismana/play-metrics.git")

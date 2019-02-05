@@ -27,10 +27,10 @@ class MetricsController @Inject() (
   def metrics = Action {
     try {
       Ok(met.toJson)
-        .as("application/json")
-        .withHeaders("Cache-Control" -> "must-revalidate,no-cache,no-store")
+        .as(JSON)
+        .withHeaders(CACHE_CONTROL → "must-revalidate,no-cache,no-store")
     } catch {
-      case ex: MetricsDisabledException =>
+      case _: MetricsDisabledException ⇒
         InternalServerError("metrics plugin not enabled")
     }
   }
