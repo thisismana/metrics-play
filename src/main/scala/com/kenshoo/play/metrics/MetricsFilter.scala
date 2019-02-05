@@ -62,7 +62,7 @@ class MetricsFilterImpl @Inject() (metrics: Metrics)(implicit val mat: Materiali
   def activeRequests: Counter = registry.counter(name(labelPrefix, "activeRequests"))
   def otherStatuses: Meter = registry.meter(name(labelPrefix, "other"))
 
-  def apply(nextFilter: (RequestHeader) ⇒ Future[Result])(rh: RequestHeader): Future[Result] = {
+  def apply(nextFilter: RequestHeader ⇒ Future[Result])(rh: RequestHeader): Future[Result] = {
 
     val context = requestsTimer.time()
 

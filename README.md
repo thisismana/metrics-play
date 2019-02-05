@@ -1,12 +1,12 @@
 # metrics-play
 
-This module provides some support for @codahale [Metrics](https://dropwizard.github.io/metrics/3.1.2/) library in a Play2 application (Scala)
+This module provides some support for @codahale [Metrics](https://dropwizard.github.io/metrics/4.0.5/) library in a Play2 application (Scala)
 
 [![Build Status](https://travis-ci.org/kenshoo/metrics-play.png)](https://travis-ci.org/kenshoo/metrics-play)
 
 [![codecov.io](https://img.shields.io/codecov/c/gh/kenshoo/metrics-play/master.svg)](https://codecov.io/github/kenshoo/metrics-play/branch/master)
 
-Play Version: 2.6.19, Metrics Version: 4.0.3, Scala Versions: 2.12.6
+Play Version: 2.7.0, Metrics Version: 4.0.5, Scala Versions: 2.12.8 and 2.13.0-M5
 
 ## Features
 
@@ -20,14 +20,14 @@ Play Version: 2.6.19, Metrics Version: 4.0.3, Scala Versions: 2.12.6
 Add metrics-play dependency:
 
 ```scala
-    libraryDependencies += "com.kenshoo" %% "metrics-play" % "2.6.19_0.7.0"
+    libraryDependencies += "com.kenshoo" %% "metrics-play" % "2.7.0_0.7.0"
 ```
 
 To enable the module:
 
 add to application.conf the following line
 
-     play.modules.enabled+="com.kenshoo.play.metrics.PlayModule"
+     play.modules.enabled += "com.kenshoo.play.metrics.PlayModule"
 
 ### Default Registry
 
@@ -45,7 +45,7 @@ To add a custom metrics, you can use `defaultRegistry` which returns an instance
 
 ### Metrics Controller
 
-An implementation of the [metrics-servlet](http://metrics.dropwizard.io/3.1.0/manual/servlets/#metricsservlet) as a play2 controller.
+An implementation of the [metrics-servlet](http://metrics.dropwizard.io/4.0.5/manual/servlets/#metricsservlet) as a play2 controller.
 
 It exports all registered metrics as a json document.
 
@@ -138,6 +138,7 @@ instead of `com.kenshoo.play.metrics.PlayModule`
 
 ## Changes
 
+* 2.7.0_0.7.0 - Upgrade to play 2.7.0 and Scala 2.12.8 and dropwizard 4.0.5
 * 2.6.19_0.7.0 - Upgrade to play 2.6.19 and Scala 2.12.6 and dropwizard 4.0.3
 * 2.6.2_0.6.1 - Upgrade to play 2.6 and Scala 2.12. Migration: If you get errors like "No configuration setting found ..." when building fat JARs, check your merge strategy for reference.conf. 
 * 2.4.0_0.4.0 - Re-implement as Play Module

@@ -9,22 +9,34 @@ import com.codahale.metrics.jvm.{GarbageCollectorMetricSet, JvmAttributeGaugeSet
 import com.codahale.metrics.logback.InstrumentedAppender
 import com.codahale.metrics.{MetricRegistry, SharedMetricRegistries}
 import com.fasterxml.jackson.databind.{ObjectMapper, ObjectWriter}
+import com.typesafe.config.ConfigFactory
 import javax.inject.{Inject, Singleton}
 import play.api.inject.ApplicationLifecycle
 import play.api.{Configuration, Environment, Logger}
 
 import scala.concurrent.Future
 
-
 trait Metrics {
 
+  /**
+    * Get direct access to the `MetricRegistry`
+    *
+    * @return `MetricRegistry`
+    */
   def defaultRegistry: MetricRegistry
 
+  /**
+    * Print the metric registry's data as a pretty Sting
+    *
+    * @return `String` containing JSON formatted data of the registry
+    */
   def toJson: String
 }
 
 @Singleton
-class MetricsImpl @Inject()(lifecycle: ApplicationLifecycle, configuration: Configuration, env: Environment) extends Metrics {
+class MetricsImpl @Inject()(lifecycle: ApplicationLifecycle, injectedConf: Configuration, env: Environment) extends Metrics {
+
+  private val configuration = Configuration(ConfigFactory.parseResources(env.classLoader, "metrics-reference.conf")) ++ injectedConf
 
   val validUnits = Set("NANOSECONDS", "MICROSECONDS", "MILLISECONDS", "SECONDS", "MINUTES", "HOURS", "DAYS")
 
