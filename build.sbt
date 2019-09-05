@@ -4,9 +4,9 @@ organization := "de.welt"
 name := "metrics-play"
 licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 
-crossScalaVersions := Seq("2.12.8", "2.13.0-M5")
+crossScalaVersions := Seq("2.12.8", "2.13.0")
 
-val PlayVersion = "2.7.0"
+val PlayVersion = "2.7.3"
 
 val metricsPlayVersion = "0.7.0"
 
